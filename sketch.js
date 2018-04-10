@@ -6,6 +6,7 @@
  * 
  *
  * URL
+ https://kao-w.github.io/pixelarray_tarea2/
  */
 
 
@@ -40,6 +41,8 @@ function setup() {
 function draw() {
   background(0);
   drawVideo5();
+  
+  noStroke();
 }
 
 /*
@@ -88,9 +91,12 @@ function draw() {
    video.loadPixels();
    
    var stepSize= 10;
+   
+   
     for(var y=0; y<video.height; y++){
     for(var x=0; x<video.width;x++){
       var index = (x+(y*video.width))*4;
+
       
       video.pixels[index] = 111; //aqui tengo los rojos
       video.pixels[index + 1] = video.pixels[index + 2]; //aqui tengo los verdes
@@ -98,6 +104,7 @@ function draw() {
       video.pixels[index + 3] = video.pixels[index + 3]; //aqui tengo el alpha
     }
    }
+
    
    for(var y=0; y<video.height; y+=stepSize){
     for(var x=0; x<video.width;x+= stepSize){
@@ -105,25 +112,37 @@ function draw() {
       var index = (x+(y*video.width))*4;
       var darkness= (255-video.pixels[index])/255;
       var radio = 0;
-      
+      var sca= 0.08;
+      var sca2= 6.08;
+      var aaa= noise(x*sca+frameCount,y*sca+frameCount);
+      var bbb= noise(x*sca2+frameCount*-1,y*sca2+frameCount*-1);
       var distancia = dist(mouseY-correctionY, mouseX-correctionX, y, x)
       
       if(distancia<150){
-        radio = int(map(distancia*2,0,250,10,5*darkness));
+        radio = int(map(distancia*2,0,350,20,5*darkness));
+         fill(video.pixels[index+2],video.pixels[index+2*radio],video.pixels[index+1]);
+         ellipse(x+correctionX,y+correctionY,radio*aaa,radio*aaa);
+         
+         
       }
       
       else{
-        radio=0;
+        radio=3;
+        fill(video.pixels[index+3],video.pixels[index+2],video.pixels[index+1]);
+        
+        rect(x+correctionX,y+correctionY,bbb*3,bbb*3);
+
+        
       }
-      fill(video.pixels[index],video.pixels[index+1],video.pixels[index+2]);
+     
       
-      ellipse(x+correctionX,y+correctionY,radio,radio);
-      
+      //ellipse(x+correctionX,y+correctionY,radio,radio);
     }
    }
-   
-   
    //video.updatePixels();
-   
    //image(video,correctionX,correctionY);
  }
+ 
+
+ 
+ 
